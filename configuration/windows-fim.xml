@@ -1,0 +1,2 @@
+<!-- Add this entry inside the <syscheck> section of the Windows agent's ossec.conf file. -->
+<directories check_all="yes" realtime="yes">C:\Wazuh-FIM-Lab</directories>
