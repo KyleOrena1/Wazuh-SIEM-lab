@@ -2,6 +2,18 @@
 
 I built this lab to practice collecting Windows security events, configuring endpoint monitoring, writing detection logic, and investigating the activity behind alerts.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    A["Windows 11 endpoint"] -->|"Security events and FIM"| B["Wazuh manager"]
+    B --> C["Built-in and custom rules"]
+    C --> D["Wazuh indexer"]
+    D --> E["Dashboard and investigation"]
+```
+
+The Windows endpoint ran the Wazuh agent, while the manager, indexer, and dashboard were deployed together on an Ubuntu virtual machine hosted with Microsoft Hyper-V.
+
 ## What I completed
 
 - Deployed a Wazuh all-in-one server on an Ubuntu virtual machine.
@@ -22,6 +34,7 @@ The planned deployment, detection, validation, and documentation work for this l
 - [Windows file integrity monitoring](documentation/file-integrity-monitoring.md) — Configured a custom FIM directory and verified added, modified, and deleted events.
 - [Custom failed-login correlation](documentation/custom-failed-login-correlation.md) — Correlated five failures against the same username into one level-10 alert.
 - [Failed-login response runbook](documentation/failed-login-response-runbook.md) — Covers validation, escalation, containment, recovery, and case closure.
+- [Reproducing the lab](documentation/reproducing-the-lab.md) — Lists the setup order, test commands, and validation checks.
 
 ## Detection and configuration files
 
@@ -31,6 +44,7 @@ The planned deployment, detection, validation, and documentation work for this l
 ## Evidence
 
 - [Failed-login event details](screenshots/failed-login-event.png)
+- [Built-in rule 60122 details](screenshots/failed-login-rule-details.png)
 - [File integrity monitoring lifecycle](screenshots/fim-lifecycle.png)
 - [Custom correlation alert](screenshots/custom-correlation-alert.png)
 
@@ -43,6 +57,14 @@ The screenshots were redacted to remove host identifiers and addressing details 
 - File integrity monitoring
 - Custom rule development and correlation
 - Alert validation and incident documentation
+
+## Lessons learned
+
+- A useful investigation starts with the raw event fields, not only the alert title.
+- Individual failed logins and a correlated burst of failures represent different detection cases.
+- MITRE ATT&CK data attached to a rule provides context, but it does not prove that the mapped technique occurred.
+- File integrity monitoring must establish a baseline before later changes can be interpreted correctly.
+- Detection documentation should explain both what was observed and what the evidence does not establish.
 
 ## Lab environment
 
