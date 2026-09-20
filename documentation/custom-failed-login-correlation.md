@@ -38,7 +38,7 @@ The resulting alert uses custom rule ID `100100`, level `10`, and MITRE ATT&CK t
 I generated five failed local authentication attempts in Administrator PowerShell:
 
 ```powershell
-1..5 | ForEach-Object { net use \\127.0.0.1\IPC$ /user:FakeWazuhUser WrongPassword123! }
+1..5 | ForEach-Object { net use \\<local-endpoint>\IPC$ /user:FakeWazuhUser WrongPassword123! }
 ```
 
 The command used a made-up account and test password on my own endpoint. Each attempt returned Windows system error 1326 because the username or password was incorrect.
@@ -49,7 +49,7 @@ After reloading the Wazuh manager, I searched Threat Hunting for the custom rule
 
 | Field | Result |
 |---|---|
-| Agent | `Kyle-Windows-PC` |
+| Agent | `Windows test endpoint` |
 | Custom rule ID | `100100` |
 | Alert level | `10` |
 | Description | Multiple failed Windows logins for the same user within 60 seconds |
@@ -67,3 +67,9 @@ This was a controlled validation, not evidence of an actual brute-force attack. 
 ## Outcome
 
 The test verified that I could build a correlation rule on top of an existing Wazuh rule, reload the ruleset, generate matching activity, and confirm the new alert by its custom rule ID and severity.
+
+## Evidence
+
+The screenshot below shows the correlated alert with custom rule ID `100100`, alert level `10`, and the expected description. Host identifiers were redacted before publication.
+
+![Custom failed-login correlation alert](../screenshots/custom-correlation-alert.png)
