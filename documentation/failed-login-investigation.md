@@ -8,7 +8,7 @@ I wanted to verify that my Windows endpoint could send failed-login events to Wa
 
 - Wazuh all-in-one server on an Ubuntu VM
 - Windows endpoint running Wazuh agent 4.14.7
-- Agent name: `Kyle-Windows-PC` (ID `001`)
+- Windows test endpoint connected to Wazuh
 
 This was a controlled test on my own computer, not an attack against another system.
 
@@ -17,14 +17,14 @@ This was a controlled test on my own computer, not an attack against another sys
 I ran the following command in Administrator PowerShell:
 
 ```powershell
-1..5 | ForEach-Object { net use \\127.0.0.1\IPC$ /user:FakeWazuhUser WrongPassword123! }
+1..5 | ForEach-Object { net use \\<local-endpoint>\IPC$ /user:FakeWazuhUser WrongPassword123! }
 ```
 
 The command attempted five connections to the local computer using a made-up username and test password. Each attempt returned system error 1326: the username or password was incorrect. The credentials above are test values, not real account credentials.
 
 ## Investigation
 
-In Wazuh Threat Hunting, I opened the Events tab for agent `001`, selected the last 24 hours, and searched for:
+In Wazuh Threat Hunting, I opened the Events tab for agent the Windows test agent, selected the last 24 hours, and searched for:
 
 ```text
 "FakeWazuhUser"
@@ -35,9 +35,9 @@ The search returned 10 matching records across two clusters of five. The capture
 | Field | Observed value |
 |---|---|
 | Alert timestamp | September 14, 2026, 13:02:27.144, as displayed in the dashboard |
-| Agent | `Kyle-Windows-PC` / `001` |
+| Agent | `Windows test endpoint` / the Windows test agent |
 | Target username | `FakeWazuhUser` |
-| Source address | `127.0.0.1` |
+| Source address | `<local-endpoint>` |
 | Authentication package | `NTLM` |
 | Logon type | `3` |
 | Windows channel | `Security` |
@@ -63,6 +63,8 @@ I verified the path from a controlled Windows login attempt to an alert in Wazuh
 
 For an unexpected alert like this, my next checks would be the source host, surrounding login activity, whether the target account exists, and any successful logins near the same time.
 
-## Evidence handling
+## Evidence
 
-The findings were checked against the PowerShell output and Wazuh event-detail screenshots. Screenshots are not embedded in this write-up yet. Before publishing evidence, I will remove credentials and unnecessary device identifiers.
+The screenshot below shows the test username, Windows event ID `4625`, and the failed-logon event message. Host identifiers were redacted before publication.
+
+![Failed Windows login event details](../screenshots/failed-login-event.png)
