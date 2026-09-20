@@ -8,7 +8,7 @@ I configured Wazuh to monitor a dedicated Windows folder and verified that it de
 
 - Wazuh all-in-one server on an Ubuntu VM
 - Windows endpoint running Wazuh agent 4.14.7
-- Agent name: `Kyle-Windows-PC` (ID `001`)
+- Windows test endpoint connected to Wazuh
 - Monitored folder: `C:\Wazuh-FIM-Lab`
 
 The test was limited to a folder created specifically for this lab.
@@ -61,7 +61,7 @@ Remove-Item 'C:\Wazuh-FIM-Lab\test.txt'
 
 ## Investigation
 
-In **File Integrity Monitoring > Events**, I searched for `"test.txt"` with the agent filter set to `001`. Wazuh returned three events for the monitored path.
+In **File Integrity Monitoring > Events**, I searched for `"test.txt"` with the Windows test agent selected. Wazuh returned three events for the monitored path.
 
 | File action | Wazuh rule ID | Alert level |
 |---|---:|---:|
@@ -87,6 +87,8 @@ This test verified that I could configure a custom FIM scope, validate the agent
 
 In a real investigation, unexpected changes to important files would require checking the user or process responsible, comparing hashes or file contents, reviewing nearby endpoint activity, and deciding whether containment was necessary.
 
-## Evidence handling
+## Evidence
 
-The findings were verified using the Windows agent log and Wazuh event results. Screenshots are not embedded yet. Before publishing screenshots, I will remove credentials and unnecessary device identifiers.
+The screenshot below shows the three-event sequence and the verified rule IDs for the modification and deletion. Host identifiers and the dashboard address were redacted before publication.
+
+![Windows file integrity monitoring events](../screenshots/fim-lifecycle.png)
