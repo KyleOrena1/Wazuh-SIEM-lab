@@ -65,6 +65,10 @@ For an unexpected alert like this, my next checks would be the source host, surr
 
 ## Evidence
 
-The screenshot below shows the test username, Windows event ID `4625`, and the failed-logon event message. Host identifiers were redacted before publication.
+The first screenshot shows the test username, Windows event ID `4625`, and the failed-logon event message. Host identifiers were redacted before publication.
 
 ![Failed Windows login event details](../screenshots/failed-login-event.png)
+
+The second screenshot shows the built-in rule that classified the event: rule `60122`, level `5`, with the description "Logon Failure - Unknown user or bad password."
+
+![Built-in Wazuh rule 60122 details](../screenshots/failed-login-rule-details.png)
