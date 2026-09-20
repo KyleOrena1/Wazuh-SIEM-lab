@@ -82,4 +82,4 @@ The screenshots were redacted to remove host identifiers and addressing details 
 
 ## Security notice
 
-Tests are limited to systems I own or am authorized to use. Passwords and unnecessary personal or device information are removed before evidence is published. Credentials shown in test commands are dummy values, not real account credentials.
+All testing was performed in my own isolated lab environment. The usernames and passwords shown in the commands are made-up test values, and identifying system details were removed from the published screenshots.
